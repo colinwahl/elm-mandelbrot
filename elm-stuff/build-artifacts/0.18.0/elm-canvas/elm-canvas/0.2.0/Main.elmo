@@ -1,0 +1,204 @@
+var _elm_canvas$elm_canvas$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_canvas$elm_canvas$Canvas$toHtml,
+				{ctor: '[]'},
+				model.canvas),
+			_1: {ctor: '[]'}
+		});
+};
+var _elm_canvas$elm_canvas$Main$fadeFactor = 8.0;
+var _elm_canvas$elm_canvas$Main$background = A3(_elm_lang$core$Color$rgb, 255, 255, 255);
+var _elm_canvas$elm_canvas$Main$bounceFactor = -1.0;
+var _elm_canvas$elm_canvas$Main$dotSize = 2.0;
+var _elm_canvas$elm_canvas$Main$maxSpeed = 50;
+var _elm_canvas$elm_canvas$Main$numberOfDots = 100;
+var _elm_canvas$elm_canvas$Main$resolution = A2(_elm_canvas$elm_canvas$Canvas$Size, 800, 600);
+var _elm_canvas$elm_canvas$Main$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		if (_p0.ctor === 'Begin') {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{dots: _p0._0}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		} else {
+			var delta = _p0._0 / 1000;
+			var updateDot = function (dot) {
+				var _p1 = _elm_canvas$elm_canvas$Canvas_Point$toFloats(dot.velocity);
+				var vx = _p1._0;
+				var vy = _p1._1;
+				var _p2 = _elm_canvas$elm_canvas$Canvas_Point$toFloats(dot.position);
+				var px = _p2._0;
+				var py = _p2._1;
+				var positionInc = {x: px + (vx * delta), y: py + (vy * delta)};
+				var reverseX = (_elm_lang$core$Native_Utils.cmp(positionInc.x, 0) < 0) || (_elm_lang$core$Native_Utils.cmp(
+					positionInc.x,
+					_elm_lang$core$Basics$toFloat(_elm_canvas$elm_canvas$Main$resolution.width)) > 0);
+				var reverseY = (_elm_lang$core$Native_Utils.cmp(positionInc.y, 0) < 0) || (_elm_lang$core$Native_Utils.cmp(
+					positionInc.y,
+					_elm_lang$core$Basics$toFloat(_elm_canvas$elm_canvas$Main$resolution.height)) > 0);
+				var velocity = _elm_canvas$elm_canvas$Canvas_Point$fromFloats(
+					{
+						ctor: '_Tuple2',
+						_0: vx * (reverseX ? _elm_canvas$elm_canvas$Main$bounceFactor : 1.0),
+						_1: vy * (reverseY ? _elm_canvas$elm_canvas$Main$bounceFactor : 1.0)
+					});
+				var position = _elm_canvas$elm_canvas$Canvas_Point$fromFloats(
+					{
+						ctor: '_Tuple2',
+						_0: A2(
+							_elm_lang$core$Basics$min,
+							A2(_elm_lang$core$Basics$max, positionInc.x, 0),
+							_elm_lang$core$Basics$toFloat(_elm_canvas$elm_canvas$Main$resolution.width)),
+						_1: A2(
+							_elm_lang$core$Basics$min,
+							A2(_elm_lang$core$Basics$max, positionInc.y, 0),
+							_elm_lang$core$Basics$toFloat(_elm_canvas$elm_canvas$Main$resolution.height))
+					});
+				return _elm_lang$core$Native_Utils.update(
+					dot,
+					{position: position, velocity: velocity});
+			};
+			var dots = A2(_elm_lang$core$List$map, updateDot, model.dots);
+			var dotDrawOps = function () {
+				var drawDot = function (dot) {
+					var halfSize = _elm_canvas$elm_canvas$Main$dotSize / 2;
+					var _p3 = _elm_canvas$elm_canvas$Canvas_Point$toFloats(dot.position);
+					var originX = _p3._0;
+					var originY = _p3._1;
+					return {
+						ctor: '::',
+						_0: _elm_canvas$elm_canvas$Canvas$BeginPath,
+						_1: {
+							ctor: '::',
+							_0: _elm_canvas$elm_canvas$Canvas$FillStyle(dot.color),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_canvas$elm_canvas$Canvas$Rect,
+									_elm_canvas$elm_canvas$Canvas_Point$fromFloats(
+										{ctor: '_Tuple2', _0: originX - halfSize, _1: originY - halfSize}),
+									A2(
+										_elm_canvas$elm_canvas$Canvas$Size,
+										_elm_lang$core$Basics$round(_elm_canvas$elm_canvas$Main$dotSize),
+										_elm_lang$core$Basics$round(_elm_canvas$elm_canvas$Main$dotSize))),
+								_1: {
+									ctor: '::',
+									_0: _elm_canvas$elm_canvas$Canvas$Fill,
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					};
+				};
+				return A2(_elm_lang$core$List$concatMap, drawDot, dots);
+			}();
+			var size = _elm_canvas$elm_canvas$Canvas$getSize(model.canvas);
+			var fade = function () {
+				var rgb = _elm_lang$core$Color$toRgb(_elm_canvas$elm_canvas$Main$background);
+				return {
+					ctor: '::',
+					_0: _elm_canvas$elm_canvas$Canvas$BeginPath,
+					_1: {
+						ctor: '::',
+						_0: _elm_canvas$elm_canvas$Canvas$FillStyle(
+							A4(_elm_lang$core$Color$rgba, rgb.red, rgb.green, rgb.blue, _elm_canvas$elm_canvas$Main$fadeFactor * delta)),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_canvas$elm_canvas$Canvas$Rect,
+								_elm_canvas$elm_canvas$Canvas_Point$fromInts(
+									{ctor: '_Tuple2', _0: 0, _1: 0}),
+								size),
+							_1: {
+								ctor: '::',
+								_0: _elm_canvas$elm_canvas$Canvas$Fill,
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				};
+			}();
+			var drawOps = A2(_elm_lang$core$Basics_ops['++'], fade, dotDrawOps);
+			var canvas = A2(_elm_canvas$elm_canvas$Canvas$batch, drawOps, model.canvas);
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{canvas: canvas, dots: dots}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		}
+	});
+var _elm_canvas$elm_canvas$Main$Model = F2(
+	function (a, b) {
+		return {canvas: a, dots: b};
+	});
+var _elm_canvas$elm_canvas$Main$Dot = F3(
+	function (a, b, c) {
+		return {position: a, velocity: b, color: c};
+	});
+var _elm_canvas$elm_canvas$Main$Delta = function (a) {
+	return {ctor: 'Delta', _0: a};
+};
+var _elm_canvas$elm_canvas$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: _elm_lang$animation_frame$AnimationFrame$diffs(_elm_canvas$elm_canvas$Main$Delta),
+			_1: {ctor: '[]'}
+		});
+};
+var _elm_canvas$elm_canvas$Main$Begin = function (a) {
+	return {ctor: 'Begin', _0: a};
+};
+var _elm_canvas$elm_canvas$Main$init = function () {
+	var colorGenerator = A5(
+		_elm_lang$core$Random$map4,
+		_elm_lang$core$Color$rgba,
+		A2(_elm_lang$core$Random$int, 20, 255),
+		A2(_elm_lang$core$Random$int, 20, 255),
+		A2(_elm_lang$core$Random$int, 20, 255),
+		A2(_elm_lang$core$Random$float, 0.2, 1.0));
+	var toPoint = F2(
+		function (x, y) {
+			return _elm_canvas$elm_canvas$Canvas_Point$fromFloats(
+				{ctor: '_Tuple2', _0: x, _1: y});
+		});
+	var positionGenerator = A3(
+		_elm_lang$core$Random$map2,
+		toPoint,
+		A2(
+			_elm_lang$core$Random$float,
+			0,
+			_elm_lang$core$Basics$toFloat(_elm_canvas$elm_canvas$Main$resolution.width)),
+		A2(
+			_elm_lang$core$Random$float,
+			0,
+			_elm_lang$core$Basics$toFloat(_elm_canvas$elm_canvas$Main$resolution.height)));
+	var velocityGenerator = A3(
+		_elm_lang$core$Random$map2,
+		toPoint,
+		A2(_elm_lang$core$Random$float, 0 - _elm_canvas$elm_canvas$Main$maxSpeed, _elm_canvas$elm_canvas$Main$maxSpeed),
+		A2(_elm_lang$core$Random$float, 0 - _elm_canvas$elm_canvas$Main$maxSpeed, _elm_canvas$elm_canvas$Main$maxSpeed));
+	var dotGenerator = A4(_elm_lang$core$Random$map3, _elm_canvas$elm_canvas$Main$Dot, positionGenerator, velocityGenerator, colorGenerator);
+	var dotsGenerator = A2(_elm_lang$core$Random$list, _elm_canvas$elm_canvas$Main$numberOfDots, dotGenerator);
+	return {
+		ctor: '_Tuple2',
+		_0: {
+			canvas: _elm_canvas$elm_canvas$Canvas$initialize(_elm_canvas$elm_canvas$Main$resolution),
+			dots: {ctor: '[]'}
+		},
+		_1: A2(_elm_lang$core$Random$generate, _elm_canvas$elm_canvas$Main$Begin, dotsGenerator)
+	};
+}();
+var _elm_canvas$elm_canvas$Main$main = _elm_lang$html$Html$program(
+	{init: _elm_canvas$elm_canvas$Main$init, update: _elm_canvas$elm_canvas$Main$update, view: _elm_canvas$elm_canvas$Main$view, subscriptions: _elm_canvas$elm_canvas$Main$subscriptions})();
