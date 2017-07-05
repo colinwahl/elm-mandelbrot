@@ -1,0 +1,7 @@
+var _colinwahl$elm_mandelbrot$Repl$t_s_o_l = {ctor: '_Tuple0'};
+var _colinwahl$elm_mandelbrot$Repl$d_e_l_t_r_o_n_3_0_3_0 = _colinwahl$elm_mandelbrot$Complex$abs(
+	A3(
+		_colinwahl$elm_mandelbrot$Complex$repeat,
+		85,
+		_colinwahl$elm_mandelbrot$Complex$zero,
+		A2(_colinwahl$elm_mandelbrot$Complex$Complex, -0.1232, 0.123)));

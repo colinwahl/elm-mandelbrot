@@ -1,0 +1,75 @@
+var _colinwahl$elm_mandelbrot$Main$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		return {
+			ctor: '_Tuple2',
+			_0: {width: _p0._0.width, height: _p0._0.height},
+			_1: _elm_lang$core$Platform_Cmd$none
+		};
+	});
+var _colinwahl$elm_mandelbrot$Main$fillPixel = F4(
+	function (width, height, x, y) {
+		return {
+			ctor: '::',
+			_0: _colinwahl$elm_mandelbrot$Canvas$FillStyle(
+				A3(_elm_lang$core$Color$rgb, x * y, x, y)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_colinwahl$elm_mandelbrot$Canvas$FillRect,
+					_colinwahl$elm_mandelbrot$Canvas_Point$fromInts(
+						{ctor: '_Tuple2', _0: x, _1: y}),
+					A2(_colinwahl$elm_mandelbrot$Canvas$Size, 1, 1)),
+				_1: {ctor: '[]'}
+			}
+		};
+	});
+var _colinwahl$elm_mandelbrot$Main$fillBlue = function (model) {
+	return _elm_lang$core$List$concat(
+		A2(
+			_elm_lang$core$List$map,
+			function (x) {
+				return _elm_lang$core$List$concat(
+					A2(
+						_elm_lang$core$List$map,
+						function (y) {
+							return A4(_colinwahl$elm_mandelbrot$Main$fillPixel, model.width, model.height, x, y);
+						},
+						A2(_elm_lang$core$List$range, 0, model.height)));
+			},
+			A2(_elm_lang$core$List$range, 0, model.width)));
+};
+var _colinwahl$elm_mandelbrot$Main$view = function (model) {
+	return A2(
+		_colinwahl$elm_mandelbrot$Canvas$toHtml,
+		{ctor: '[]'},
+		A2(
+			_colinwahl$elm_mandelbrot$Canvas$batch,
+			_colinwahl$elm_mandelbrot$Main$fillBlue(model),
+			_colinwahl$elm_mandelbrot$Canvas$initialize(
+				A2(_colinwahl$elm_mandelbrot$Canvas$Size, model.width, model.height))));
+};
+var _colinwahl$elm_mandelbrot$Main$Model = F2(
+	function (a, b) {
+		return {width: a, height: b};
+	});
+var _colinwahl$elm_mandelbrot$Main$WindowResize = function (a) {
+	return {ctor: 'WindowResize', _0: a};
+};
+var _colinwahl$elm_mandelbrot$Main$initCmd = A2(
+	_elm_lang$core$Task$perform,
+	function (size) {
+		return _colinwahl$elm_mandelbrot$Main$WindowResize(
+			{width: size.width, height: size.height});
+	},
+	_elm_lang$window$Window$size);
+var _colinwahl$elm_mandelbrot$Main$init = {
+	ctor: '_Tuple2',
+	_0: {width: 10, height: 10},
+	_1: _colinwahl$elm_mandelbrot$Main$initCmd
+};
+var _colinwahl$elm_mandelbrot$Main$subscriptions = function (model) {
+	return _elm_lang$window$Window$resizes(_colinwahl$elm_mandelbrot$Main$WindowResize);
+};
+var _colinwahl$elm_mandelbrot$Main$main = _elm_lang$html$Html$program(
+	{init: _colinwahl$elm_mandelbrot$Main$init, view: _colinwahl$elm_mandelbrot$Main$view, update: _colinwahl$elm_mandelbrot$Main$update, subscriptions: _colinwahl$elm_mandelbrot$Main$subscriptions})();

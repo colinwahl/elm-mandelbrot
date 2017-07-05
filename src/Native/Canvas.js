@@ -3,7 +3,7 @@
 /*global _elm_lang$core$Native_Scheduler */
 /*global _elm_lang$virtual_dom$Native_VirtualDom */
 
-var _elm_canvas$elm_canvas$Native_Canvas = function () {  // eslint-disable-line no-unused-vars
+var _colinwahl$elm_mandelbrot$Native_Canvas = function () {  // eslint-disable-line no-unused-vars
 
 
   function LOG(msg) { // eslint-disable-line no-unused-vars
@@ -122,7 +122,7 @@ var _elm_canvas$elm_canvas$Native_Canvas = function () {  // eslint-disable-line
       break;
 
     case "LineJoin" :
-    
+
       ctx.lineJoin = drawOp._0;
       break;
 
@@ -132,7 +132,7 @@ var _elm_canvas$elm_canvas$Native_Canvas = function () {  // eslint-disable-line
       break;
 
     case "LineDashOffset" :
-    
+
       ctx.lineDashOffset = drawOp._0;
       break;
 
@@ -235,8 +235,8 @@ var _elm_canvas$elm_canvas$Native_Canvas = function () {  // eslint-disable-line
     case "SetTransform" :
 
       ctx.setTransform(
-        drawOp._0, 
-        drawOp._1, 
+        drawOp._0,
+        drawOp._1,
         drawOp._2,
         drawOp._3,
         drawOp._4,
@@ -247,8 +247,8 @@ var _elm_canvas$elm_canvas$Native_Canvas = function () {  // eslint-disable-line
     case "Transform" :
 
       ctx.transform(
-        drawOp._0, 
-        drawOp._1, 
+        drawOp._0,
+        drawOp._1,
         drawOp._2,
         drawOp._3,
         drawOp._4,
@@ -335,7 +335,7 @@ var _elm_canvas$elm_canvas$Native_Canvas = function () {  // eslint-disable-line
       ctx.clip();
       break;
 
-    case "ClosePath" : 
+    case "ClosePath" :
 
       ctx.clearPath();
       break;
@@ -438,7 +438,7 @@ var _elm_canvas$elm_canvas$Native_Canvas = function () {  // eslint-disable-line
     var canvas = model.canvas();
     var ctx = canvas.getContext("2d");
     var imageData = ctx.getImageData(
-      point._0, 
+      point._0,
       point._1,
       size.width,
       size.height
